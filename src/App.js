@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { connect } from 'react-redux';
+import Counter from './componets/Counter';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+  render() {
+    return (
+        <div className="center">
+          <button onClick={() => this.props.addCounter()}>Add Counter</button>
+          <Counter />
+        </div>
+      );
+  }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    counters: state.counters,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteCounter: id => {
+      dispatch({ type: 'DELETE_COUNTER', payload: id });
+    },
+    addCounter: () => {
+      dispatch({ type: 'ADD_COUNTER' });
+    },
+    dispatch 
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
