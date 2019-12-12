@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+
 
 const initialState = {
   counters: [
@@ -19,55 +20,47 @@ function reducer(state = initialState, action) {
     case 'INCREMENT':
       return {
         ...state,
-        counters: [
-          state.counters.map(element => {
-            if (action.payload === element.id) {
-              return { id: element.id, count: element.count + 1 };
-            }
-            return { id: element.id, count: element.count };
-          }),
-        ],
+        counters: state.counters.map((element) => {
+          if (action.payload === element.id) {
+            return { id: element.id, count: element.count + 1 };
+          }
+          return { id: element.id, count: element.count };
+        }),
       };
     case 'DECREMENT':
       return {
         ...state,
-        counters: [
-          state.counters.forEach(element => {
-            if (action.payload == element.id) {
-              return { id: element.id, count: element.count - 1 };
-            }
-            return { id: element.id, count: element.count };
-          }),
-        ],
+        counters: state.counters.map((element) => {
+          if (action.payload === element.id) {
+            return { id: element.id, count: element.count - 1 };
+          }
+          return { id: element.id, count: element.count };
+        }),
       };
     case 'RESET':
       return {
         ...state,
-        counters: [
-          state.counters.forEach(element => {
-            if (action.payload == element.id) {
-              return { id: element.id, count: 0 };
-            }
-            return { id: element.id, count: element.count };
-          }),
-        ],
+        counters: state.counters.map((element) => {
+          if (action.payload === element.id) {
+            return { id: element.id, count: 0 };
+          }
+          return { id: element.id, count: element.count };
+        }),
       };
     case 'DELETE_COUNTER':
       return {
         ...state,
-        counters: [
-          state.counters.filter(element => {
-            if (action.payload == element.id) {
-              return false;
-            }
-            return true;
-          }),
-        ],
+        counters: state.counters.filter((element) => {
+          if (action.payload === element.id) {
+            return false;
+          }
+          return true;
+        }),
       };
-    case 'ADD_COUNTER':
+    case 'ADD_COUNTER': {
       let highestId = 0;
 
-      state.counters.forEach(element => {
+      state.counters.map((element) => {
         if (element.id > highestId) {
           highestId = element.id;
         }
@@ -80,6 +73,7 @@ function reducer(state = initialState, action) {
           { id: highestId + 1, count: 1 },
         ],
       };
+    }
     default:
       return state;
   }

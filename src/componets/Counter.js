@@ -3,54 +3,44 @@ import './Counter.css';
 import { connect } from 'react-redux';
 
 class Counter extends React.Component {
- 
-  decrement = () => {
-    this.props.dispatch({ type: 'DECREMENT' });
-  };
-
-  reset = () => {
-    this.props.dispatch({ type: 'RESET' });
-  };
-
   render() {
-    const counters = this.props.counters;
+    const { counters } = this.props;
 
-
-    return counters.map(element => {
-      return (
-        <div className="count">
-          <div className="counter">
-            <h2>Counter</h2>
-          <button onClick={this.decrement}>&ndash;</button>
+    return counters.map((element) => (
+      <div className="count">
+        <div className="counter">
+          <h2>Counter</h2>
+          <button onClick={() => this.props.decrement(element.id)}>&ndash;</button>
           <span className="count">{element.count}</span>
           <button onClick={() => this.props.increment(element.id)}>+</button>
           <p>
-            <button onClick={this.reset}>RESET</button>
+            <button onClick={() => this.props.reset(element.id)}>RESET</button>
           </p>
           <button onClick={() => this.props.deleteCounter(element.id)}>Delete Counter</button>
-          </div>       
         </div>
-      );
-    });
+      </div>
+    ));
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    counters: state.counters,
-  };
-};
+const mapStateToProps = (state) => ({
+  counters: state.counters,
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    deleteCounter: id => {
-      dispatch({ type: 'DELETE_COUNTER', payload: id });
-    },
-    increment: id => {
-        dispatch({type: 'INCREMENT', payload: id})
-    },
-    dispatch 
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  deleteCounter: (id) => {
+    dispatch({ type: 'DELETE_COUNTER', payload: id });
+  },
+  increment: (id) => {
+    dispatch({ type: 'INCREMENT', payload: id });
+  },
+  decrement: (id) => {
+    dispatch({ type: 'DECREMENT', payload: id });
+  },
+  reset: (id) => {
+    dispatch({ type: 'RESET', payload: id });
+  },
+  dispatch,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Counter);
